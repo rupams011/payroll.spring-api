@@ -24,4 +24,4 @@ spring:
 #        add-mappings: false
 
 springdoc:
-    packagesToScan: com.spring.country.api
+    packagesToScan: com.payroll.springapi
