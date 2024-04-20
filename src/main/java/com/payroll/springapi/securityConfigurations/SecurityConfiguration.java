@@ -30,6 +30,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {"/api/public/auth/**",
+//            "/api/public/credentials/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
