@@ -8,7 +8,6 @@ import com.payroll.springapi.entities.Token;
 import com.payroll.springapi.entities.UserCredentials;
 import com.payroll.springapi.repositories.UserCredentialsRepository;
 import com.payroll.springapi.securityConfigurations.JwtService;
-import com.payroll.springapi.securityConfigurations.TokenRepository;
 import com.payroll.springapi.securityConfigurations.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +26,7 @@ import java.time.LocalDateTime;
 public class AuthenticationService {
 
     private final UserCredentialsRepository userCredentialsRepository;
-    private final TokenRepository tokenRepository;
+//    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -79,7 +78,7 @@ public class AuthenticationService {
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
+//        revokeAllUserTokens(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -89,16 +88,16 @@ public class AuthenticationService {
 
     private void saveUserToken(UserCredentials user, String jwtToken){
         var token = Token.builder()
-                .user(user)
+                .userCredentials(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
                 .revoked(false)
                 .build();
-        tokenRepository.save(token);
+//        tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(UserCredentials user) {
+    /*private void revokeAllUserTokens(UserCredentials user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;
@@ -107,7 +106,7 @@ public class AuthenticationService {
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
-    }
+    }*/
 
     public void refreshToken(
             HttpServletRequest request,
@@ -126,7 +125,7 @@ public class AuthenticationService {
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);
-                revokeAllUserTokens(user);
+//                revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
                 var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)

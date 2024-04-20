@@ -23,7 +23,7 @@ public class Token {
 
     @Id
     @GeneratedValue
-    public Integer id;
+    public Integer tid;
 
     @Column(unique = true)
     public String token;
@@ -37,5 +37,5 @@ public class Token {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
-    public UserCredentials user;
+    public UserCredentials userCredentials;
 }
