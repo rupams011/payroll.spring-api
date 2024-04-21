@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api/public/credentials")
+@RequestMapping(path = "/api/app/credentials")
 public class UserCredentialsController {
 
     private UserCredentialsService userCredentialsService = null;

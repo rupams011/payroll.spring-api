@@ -3,25 +3,18 @@ package com.payroll.springapi.securityConfigurations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.payroll.springapi.securityConfigurations.Permission.*;
-import static com.payroll.springapi.securityConfigurations.Role.ADMIN;
-import static com.payroll.springapi.securityConfigurations.Role.MANAGER;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
-import com.payroll.springapi.securityConfigurations.Permission;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +23,6 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {"/api/public/auth/**",
-//            "/api/public/credentials/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -45,7 +37,6 @@ public class SecurityConfiguration {
     private final JWTAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
-//    private final AuthenticationManager authenticationManager;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -54,17 +45,15 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers(GET, "/api/public/credentials/**").hasAnyAuthority("O")
-//                                .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
-//                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-//                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-//                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-//                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+                                .requestMatchers("/api/app/**").hasAnyAuthority("O")
+                                .requestMatchers(GET, "/api/app/**").hasAnyAuthority("O")
+                                .requestMatchers(POST, "/api/app/**").hasAnyAuthority("O")
+                                .requestMatchers(PUT, "/api/app/**").hasAnyAuthority("O")
+                                .requestMatchers(DELETE, "/api/app/**").hasAnyAuthority("O")
+                                .requestMatchers(PATCH, "/api/app/**").hasAnyAuthority("O")
                                 .anyRequest()
                                 .authenticated()
                 )
-                /*.authorizeRequests(authorizeRequests -> authorizeRequests.anyRequest()
-                    .permitAll())*/
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -73,20 +62,6 @@ public class SecurityConfiguration {
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 );
-
-                /*.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers(WHITE_LIST_URL)
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationManager(authenticationManager)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);*/
         return http.build();
     }
 }
