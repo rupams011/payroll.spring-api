@@ -1,4 +1,4 @@
-package com.payroll.springapi.securityConfigurations;
+package com.payroll.springapi.securities.securityConfigurations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

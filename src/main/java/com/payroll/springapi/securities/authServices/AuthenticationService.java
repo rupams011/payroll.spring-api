@@ -1,14 +1,14 @@
-package com.payroll.springapi.services.authServices;
+package com.payroll.springapi.securities.authServices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.payroll.springapi.controllers.authControllers.AuthenticationRequest;
-import com.payroll.springapi.controllers.authControllers.AuthenticationResponse;
-import com.payroll.springapi.controllers.authControllers.RegisterRequest;
-import com.payroll.springapi.entities.Token;
+import com.payroll.springapi.securities.authControllers.AuthenticationRequest;
+import com.payroll.springapi.securities.authControllers.AuthenticationResponse;
+import com.payroll.springapi.securities.authEntities.RegisterRequest;
+import com.payroll.springapi.securities.authEntities.Token;
 import com.payroll.springapi.entities.UserCredentials;
 import com.payroll.springapi.repositories.UserCredentialsRepository;
-import com.payroll.springapi.securityConfigurations.JwtService;
-import com.payroll.springapi.securityConfigurations.TokenType;
+import com.payroll.springapi.securities.securityConfigurations.JwtService;
+import com.payroll.springapi.securities.authEntities.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

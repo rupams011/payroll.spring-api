@@ -1,4 +1,4 @@
-package com.payroll.springapi.controllers.authControllers;
+package com.payroll.springapi.securities.authControllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

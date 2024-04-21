@@ -1,4 +1,4 @@
-package com.payroll.springapi.securityConfigurations;
+package com.payroll.springapi.securities.authServices;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

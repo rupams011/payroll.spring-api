@@ -1,4 +1,4 @@
-package com.payroll.springapi.securityConfigurations;
+package com.payroll.springapi.securities.securityConfigurations;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

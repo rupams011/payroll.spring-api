@@ -1,4 +1,4 @@
-package com.payroll.springapi.securityConfigurations;
+package com.payroll.springapi.securities.securityConfigurations;
 
 import com.payroll.springapi.entities.UserCredentials;
 import org.springframework.data.domain.AuditorAware;

@@ -1,9 +1,9 @@
-package com.payroll.springapi.securityConfigurations;
+package com.payroll.springapi.securities.securityConfigurations;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.payroll.springapi.entities.Token;
+import com.payroll.springapi.securities.authEntities.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,4 +1,4 @@
-package com.payroll.springapi.controllers.authControllers;
+package com.payroll.springapi.securities.authControllers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

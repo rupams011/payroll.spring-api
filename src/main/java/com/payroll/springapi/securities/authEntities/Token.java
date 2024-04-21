@@ -1,5 +1,5 @@
-package com.payroll.springapi.entities;
-import com.payroll.springapi.securityConfigurations.TokenType;
+package com.payroll.springapi.securities.authEntities;
+import com.payroll.springapi.entities.UserCredentials;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

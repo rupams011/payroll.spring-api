@@ -1,4 +1,4 @@
-package com.payroll.springapi.securityConfigurations;
+package com.payroll.springapi.securities.authEntities;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

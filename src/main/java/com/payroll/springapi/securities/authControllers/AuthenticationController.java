@@ -1,6 +1,7 @@
-package com.payroll.springapi.controllers.authControllers;
+package com.payroll.springapi.securities.authControllers;
 
-import com.payroll.springapi.services.authServices.AuthenticationService;
+import com.payroll.springapi.securities.authEntities.RegisterRequest;
+import com.payroll.springapi.securities.authServices.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
