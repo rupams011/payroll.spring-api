@@ -45,7 +45,8 @@ public class AuthenticationExceptionResolver implements HandlerExceptionResolver
                 default:
                     message = "Unhandled exception occurred at authentication. -> " + err.get("type");
             }
-            response.getWriter().write(message);
+//            response.getWriter().write(message);
+            response.getOutputStream().println(message);
         } catch (IOException e) {
 //            throw new RuntimeException(e);
         }
