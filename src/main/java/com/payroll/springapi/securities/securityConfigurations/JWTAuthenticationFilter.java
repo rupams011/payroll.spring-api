@@ -1,5 +1,6 @@
 package com.payroll.springapi.securities.securityConfigurations;
 
+import com.payroll.springapi.securities.exceptionHandler.AuthenticationExceptionResolver;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final AuthenticationExceptionResolver authenticationExceptionResolver;
 //    private final TokenRepository tokenRepository;
 
     @Override
@@ -29,37 +31,42 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (request.getServletPath().contains("/api/public/auth")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String username;
+        try{
+            if (request.getServletPath().contains("/api/public/auth")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            final String authHeader = request.getHeader("Authorization");
+            final String jwt;
+            final String username;
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")){
-            filterChain.doFilter(request, response);
-            return;
-        }
-        jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            if (authHeader == null || !authHeader.startsWith("Bearer ")){
+                filterChain.doFilter(request, response);
+                return;
+            }
+            jwt = authHeader.substring(7);
+            username = jwtService.extractUsername(jwt);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             /*var isTokenValid = tokenRepository.findByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);*/
-            if (jwtService.isTokenValid(jwt, userDetails)){
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (jwtService.isTokenValid(jwt, userDetails)){
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+            filterChain.doFilter(request, response);
+        }catch (Exception e){
+            System.out.println(e);
+            authenticationExceptionResolver.resolveException(request, response, null, e);
         }
-        filterChain.doFilter(request, response);
     }
 }

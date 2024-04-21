@@ -1,5 +1,6 @@
 package com.payroll.springapi.exceptions;
 
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,30 @@ public class PayrollExceptionHandler {
         errorMap.put("probableSolution", "Please enter " + e.getRequiredType() + " type of value for " + e.getPropertyName() + " instead of " + e.getValue().toString());
         return errorMap;
     }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Map<String, String> HttpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e){
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("type", "MethodArgumentTypeMismatchException");
+        errorMap.put("timeStamp", LocalDateTime.now().toString());
+        errorMap.put("localizedMessage", e.getLocalizedMessage());
+        errorMap.put("httpStatusCode", e.getStatusCode().toString());
+        errorMap.put("probableSolution", "Please use http method(s) " + e.getSupportedHttpMethods().toString() + " instead of " + e.getMethod());
+        return errorMap;
+    }
+
+
+    /*@ExceptionHandler(SignatureException.class)
+    public Map<String, String> SignatureExceptionHandler(SignatureException e){
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("type", "MethodArgumentTypeMismatchException");
+        errorMap.put("timeStamp", LocalDateTime.now().toString());
+        errorMap.put("localizedMessage", e.getLocalizedMessage());
+//        errorMap.put("errorCode", e.getErrorCode());
+//        errorMap.put("probableSolution", "Please enter " + e.getRequiredType() + " type of value for " + e.getPropertyName() + " instead of " + e.getValue().toString());
+        System.out.println("error ===> " + e);
+        return errorMap;
+    }*/
 
     /*@ExceptionHandler(ResourceAlreadyExistException.class)
     public Map<String, String> ResourceAlreadyExistExceptionHandler(ResourceAlreadyExistException e){
