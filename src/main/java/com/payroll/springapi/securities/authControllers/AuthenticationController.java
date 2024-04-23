@@ -20,11 +20,6 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    /*@Autowired
-    public AuthenticationController(AuthenticationService authenticationService){
-        this.authenticationService = authenticationService;
-    }*/
-
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authenticationService.register(request));
