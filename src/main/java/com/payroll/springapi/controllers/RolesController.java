@@ -30,11 +30,11 @@ public class RolesController {
 
     @GetMapping(path = "/all")
     public ResponseEntity<List<Roles>> getAllRoles(){
-        return new ResponseEntity<List<Roles>>(rolesService.getRoles(), HttpStatus.FOUND);
+        return new ResponseEntity<List<Roles>>(rolesService.getRoles(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/privilege/{code}")
     public ResponseEntity<Roles> getRole(@PathVariable String code){
-        return new ResponseEntity<Roles>(rolesService.getRole(code), HttpStatus.FOUND);
+        return new ResponseEntity<Roles>(rolesService.getRole(code), HttpStatus.OK);
     }
 }
