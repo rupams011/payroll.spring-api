@@ -1,14 +1,14 @@
 package com.payroll.springapi.securities.authServices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.payroll.springapi.entities.UserCredentials;
+import com.payroll.springapi.repositories.UserCredentialsRepository;
 import com.payroll.springapi.securities.authControllers.AuthenticationRequest;
 import com.payroll.springapi.securities.authControllers.AuthenticationResponse;
 import com.payroll.springapi.securities.authEntities.RegisterRequest;
 import com.payroll.springapi.securities.authEntities.Token;
-import com.payroll.springapi.entities.UserCredentials;
-import com.payroll.springapi.repositories.UserCredentialsRepository;
-import com.payroll.springapi.securities.securityConfigurations.JwtService;
 import com.payroll.springapi.securities.authEntities.TokenType;
+import com.payroll.springapi.securities.securityConfigurations.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -54,6 +55,7 @@ public class AuthenticationService {
 //                .password(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt("$2b")))
                 .role(request.getRole())
                 .timestamp(LocalDateTime.now())
+                .passwordExpiry(LocalDateTime.now().plusMonths(3))
                 .build();
 //        System.out.println("Entered Details ===> " + user);
         var savedUser = userCredentialsRepository.save(user);
@@ -76,12 +78,15 @@ public class AuthenticationService {
         );
         var user = userCredentialsRepository.findByUsername(request.getUsername())
                 .orElseThrow();
+        long daysToPasswordExpiry = Duration.between(LocalDateTime.now(), user.getPasswordExpiry()).toDays();
+        boolean passwordExpired = (daysToPasswordExpiry < 0);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 //        revokeAllUserTokens(user);
         return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
+                .accessToken(!passwordExpired ? jwtToken : null)
+                .refreshToken(!passwordExpired ? refreshToken : null)
+                .passwordExpiry(passwordExpired ? "Password expired!" : ("Password to expire in " + daysToPasswordExpiry + " days."))
 //                .token(jwtToken)
                 .build();
     }

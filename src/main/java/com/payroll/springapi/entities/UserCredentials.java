@@ -47,6 +47,9 @@ public class UserCredentials implements UserDetails {
     @Column(name = "timestamp")
     private LocalDateTime timestamp;
 
+    @Column(name = "password_expiry")
+    private LocalDateTime passwordExpiry;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));

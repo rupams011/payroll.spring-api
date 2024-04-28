@@ -5,6 +5,7 @@ import com.payroll.springapi.securities.authServices.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,10 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
+//        return ResponseEntity.ok(authenticationService.authenticate(request));
+        boolean passwordExpired = authenticationResponse.getPasswordExpiry().toLowerCase().contains("password expired");
+        return new ResponseEntity<AuthenticationResponse>(authenticationResponse, (passwordExpired ? HttpStatus.UNAUTHORIZED : HttpStatus.OK));
     }
 
     @PostMapping("/refresh-token")

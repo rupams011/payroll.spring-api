@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "roles")
 @Data
@@ -25,5 +27,11 @@ public class Roles {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "valid_from")
+    private LocalDateTime validFrom;
+
+    @Column(name = "valid_to")
+    private LocalDateTime validTo;
 
 }
