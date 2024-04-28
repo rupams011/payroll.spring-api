@@ -17,11 +17,11 @@ public class SubCategories {
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
-//    @Column(name = "category_id")
-//    private int categoryId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId", referencedColumnName = "id")
-    private Categories category;
+    @Column(name = "category_id")
+    private int categoryId;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "category_id", referencedColumnName = "id")
+//    private Categories category;
 
     @Column(name = "name")
     private String subcategoryName;
