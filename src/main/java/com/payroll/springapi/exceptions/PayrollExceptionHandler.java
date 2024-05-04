@@ -1,5 +1,7 @@
 package com.payroll.springapi.exceptions;
 
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +59,36 @@ public class PayrollExceptionHandler {
         errorMap.put("probableSolution", "Please use http method(s) " + e.getSupportedHttpMethods().toString() + " instead of " + e.getMethod());
         return errorMap;
     }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public Map<String, String> InternalAuthenticationServiceExceptionHandler(InternalAuthenticationServiceException e){
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("type", "InternalAuthenticationServiceException");
+        errorMap.put("timeStamp", LocalDateTime.now().toString());
+        errorMap.put("localizedMessage", e.getLocalizedMessage());
+        errorMap.put("probableSolution", "Check if the Database server is running.");
+        return errorMap;
+    }
+
+    @ExceptionHandler(DataAccessResourceFailureException.class)
+    public Map<String, String> DataAccessResourceFailureExceptionHandler(DataAccessResourceFailureException e){
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("type", "DataAccessResourceFailureException");
+        errorMap.put("timeStamp", LocalDateTime.now().toString());
+        errorMap.put("localizedMessage", e.getLocalizedMessage());
+        return errorMap;
+    }
+
+    /*@ExceptionHandler(PSQLException.clss)
+    public Map<String, String> PSQLExceptionHandler(PSQLException e){
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("type", "PSQLException");
+        errorMap.put("timeStamp", LocalDateTime.now().toString());
+        errorMap.put("localizedMessage", e.getLocalizedMessage());
+        errorMap.put("httpStatusCode", e.getStatusCode().toString());
+        errorMap.put("probableSolution", "Please use http method(s) " + e.getSupportedHttpMethods().toString() + " instead of " + e.getMethod());
+        return errorMap;
+    }*/
 
 
     /*@ExceptionHandler(SignatureException.class)
